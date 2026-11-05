@@ -60,7 +60,7 @@ for item in items:
     item_id = urllib.parse.quote(item["id"], safe="")
     # /content redirects to a short-lived download URL; urllib follows it.
     data = request(f"https://graph.microsoft.com/v1.0/drives/{drive}/items/{item_id}/content", headers=headers)
-    if len(data) > MAX_SIZE or not data.startswith(b"\\x89PNG\\r\\n\\x1a\\n"):
+    if len(data) > MAX_SIZE or not data.startswith(bytes.fromhex("89504e470d0a1a0a")):
         raise ValueError(f"Invalid PNG or oversized file: {name}")
     (DEST / name).write_bytes(data)
     synced.append(name)
